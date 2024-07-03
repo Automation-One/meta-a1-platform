@@ -1,0 +1,142 @@
+From 974a57b5ef803382b6104be04cf92e6079b1a5c4 Mon Sep 17 00:00:00 2001
+From: Boerge Struempfel <boerge.struempfel@gmail.com>
+Date: Thu, 4 Jul 2024 00:24:59 +0200
+Subject: [PATCH 1/1] ARM: dts: imx: Add DT overlays for i.MX6 AutomationOne
+ gateway
+
+---
+ arch/arm/boot/dts/nxp/imx/Makefile          |   1 +
+ arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts | 109 ++++++++++++++++++++
+ 2 files changed, 110 insertions(+)
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts
+
+diff --git a/arch/arm/boot/dts/nxp/imx/Makefile b/arch/arm/boot/dts/nxp/imx/Makefile
+index 3629e343d322..7d5db4b7db37 100644
+--- a/arch/arm/boot/dts/nxp/imx/Makefile
++++ b/arch/arm/boot/dts/nxp/imx/Makefile
+@@ -314,6 +314,7 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
+ 	imx6ul-tx6ul-0010.dtb \
+ 	imx6ul-tx6ul-0011.dtb \
+ 	imx6ul-tx6ul-mainboard.dtb \
++	imx6ull-a1-gw.dtb \
+ 	imx6ull-14x14-evk.dtb \
+ 	imx6ull-colibri-aster.dtb \
+ 	imx6ull-colibri-emmc-aster.dtb \
+diff --git a/arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts b/arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts
+new file mode 100644
+index 000000000000..905f6c51f51b
+--- /dev/null
++++ b/arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts
+@@ -0,0 +1,109 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2017 exceet electronics GmbH
++ * Copyright (C) 2019 Kontron Electronics GmbH
++ */
++
++/dts-v1/;
++
++#include "imx6ull-kontron-sl.dtsi"
++#include "imx6ul-kontron-bl-common.dtsi"
++
++/ {
++	model = "Automation-One Gateway";
++	compatible = "automation-one,imx6ull-gw", "kontron,imx6ull-n6411-s",
++		     "kontron,imx6ull-n6411-som", "fsl,imx6ull";
++
++	aliases {
++		rtc0 = &st_rtc;
++		rtc1 = &snvs_rtc;
++	};
++
++	/delete-node/ gpio-leds;
++
++	usdhc2_pwrseq: usdhc2_pwrseq {
++		compatible = "mmc-pwrseq-simple";
++		reset-gpios = <&gpio4 10 GPIO_ACTIVE_LOW>;
++	};
++};
++
++&i2c4 {
++	rtc@32{
++		status = "disabled";
++	};
++};
++
++&i2c4 {
++	st_rtc: m41t00@68 {
++		compatible = "st,m41t00";
++		reg = <0x68>;
++	};
++};
++
++&uart1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart1>;
++	rts-gpios = <&gpio1 18 GPIO_ACTIVE_HIGH>;
++	linux,rs485-enabled-at-boot-time;
++	status = "okay";
++};
++
++&uart2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart2>;
++	status = "okay";
++};
++
++&uart3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart3>;
++	rts-gpios = <&gpio1 26 GPIO_ACTIVE_HIGH>;
++	cts-gpios = <&gpio1 27 GPIO_ACTIVE_HIGH>;
++	status = "okay";
++};
++
++&usdhc2 {
++	pinctrl-names = "default", "state_100mhz", "state_200mhz";
++	pinctrl-0 = <&pinctrl_usdhc2>;
++	pinctrl-1 = <&pinctrl_usdhc2_100mhz>;
++	pinctrl-2 = <&pinctrl_usdhc2_200mhz>;
++	bus-width = <4>;
++	non-removable;
++	keep-power-in-suspend;
++	wakeup-source;
++	vmmc-supply = <&reg_3v3>;
++	voltage-ranges = <3300 3300>;
++	no-1-8-v;
++	mmc-pwrseq = <&usdhc2_pwrseq>;
++	status = "okay";
++};
++
++&usbotg1 {
++	dr_mode = "host";
++};
++
++&iomuxc {
++	pinctrl_uart1: uart1grp {
++		fsl,pins = <
++			MX6UL_PAD_UART1_TX_DATA__UART1_DCE_TX	0x1b0b1
++			MX6UL_PAD_UART1_RX_DATA__UART1_DCE_RX	0x1b0b1
++			MX6UL_PAD_UART1_CTS_B__GPIO1_IO18	0x10b0
++		>;
++	};
++
++	pinctrl_uart2: uart2grp {
++		fsl,pins = <
++			MX6UL_PAD_NAND_DATA04__UART2_DCE_TX	0x1b0b1
++			MX6UL_PAD_NAND_DATA05__UART2_DCE_RX	0x1b0b1
++		>;
++	};
++
++	pinctrl_uart3: uart3grp {
++		fsl,pins = <
++			MX6UL_PAD_UART3_TX_DATA__UART3_DCE_TX	0x1b0b1
++			MX6UL_PAD_UART3_RX_DATA__UART3_DCE_RX	0x1b0b1
++			MX6UL_PAD_UART3_CTS_B__GPIO1_IO26	0x10b0
++			MX6UL_PAD_UART3_RTS_B__GPIO1_IO27	0x10b0
++		>;
++	};
++};
+-- 
+2.45.2
+

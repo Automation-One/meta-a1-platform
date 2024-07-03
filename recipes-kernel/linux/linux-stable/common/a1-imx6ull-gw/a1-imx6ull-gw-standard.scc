@@ -1,0 +1,7 @@
+define KMACHINE a1-imx6ull-gw
+define KTYPE standard
+define KARCH arm
+branch a1-imx6ull-gw
+kconf hardware a1-imx6ull-gw.cfg
+
+include a1-imx6ull-gw-patches.scc
