@@ -1,0 +1,64 @@
+From 85e73f8c0916b79d3cd45a67625d6443b2ea6552 Mon Sep 17 00:00:00 2001
+From: Boerge Struempfel <boerge.struempfel@gmail.com>
+Date: Sat, 6 Jul 2024 21:33:55 +0200
+Subject: [PATCH 3/3] kontron_mx6ul: Retrieve the MAC address for ENET2
+
+Currently the ENET2 MAC address is not passed to the kernel, which
+causes the kernel to use a random MAC.
+
+Retrieve the ENET2 MAC address from the fuses to fix this problem.
+
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Boerge Struempfel <boerge.struempfel@gmail.com>
+---
+ board/kontron/sl-mx6ul/sl-mx6ul.c  | 14 ++++++++++++++
+ configs/kontron-sl-mx6ul_defconfig |  1 +
+ 2 files changed, 15 insertions(+)
+
+diff --git a/board/kontron/sl-mx6ul/sl-mx6ul.c b/board/kontron/sl-mx6ul/sl-mx6ul.c
+index 0f45ea84fc7..17a4b34f733 100644
+--- a/board/kontron/sl-mx6ul/sl-mx6ul.c
++++ b/board/kontron/sl-mx6ul/sl-mx6ul.c
+@@ -9,6 +9,7 @@
+ #include <env_internal.h>
+ #include <fdt_support.h>
+ #include <phy.h>
++#include <net.h>
+ #include <sl-mx6ul-common.h>
+ 
+ DECLARE_GLOBAL_DATA_PTR;
+@@ -86,6 +87,19 @@ int board_init(void)
+ 	return 0;
+ }
+ 
++int board_late_init(void)
++{
++	unsigned char eth1addr[6];
++
++	/* Get the MAC address for the second Ethernet port */
++	imx_get_mac_from_fuse(1, eth1addr);
++
++	if (!env_get("eth1addr") && is_valid_ethaddr(eth1addr))
++		eth_env_set_enetaddr("eth1addr", eth1addr);
++
++	return 0;
++}
++
+ enum env_location env_get_location(enum env_operation op, int prio)
+ {
+ 	if (prio)
+diff --git a/configs/kontron-sl-mx6ul_defconfig b/configs/kontron-sl-mx6ul_defconfig
+index 0bbad479691..288a2f4c549 100644
+--- a/configs/kontron-sl-mx6ul_defconfig
++++ b/configs/kontron-sl-mx6ul_defconfig
+@@ -32,6 +32,7 @@ CONFIG_SYS_PBSIZE=532
+ CONFIG_SYS_CONSOLE_IS_IN_ENV=y
+ CONFIG_BOARD_TYPES=y
+ CONFIG_BOARD_EARLY_INIT_F=y
++CONFIG_BOARD_LATE_INIT=y
+ CONFIG_SPL_RAW_IMAGE_SUPPORT=y
+ CONFIG_SPL_LEGACY_IMAGE_FORMAT=y
+ CONFIG_SPL_LEGACY_IMAGE_CRC_CHECK=y
+-- 
+2.45.2
+
