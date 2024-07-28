@@ -1,6 +1,6 @@
 MACHINEOVERRIDES =. "a1-gw:a1-imx-gw:"
 
-MACHINE_FEATURES ?= "apm serial usbhost 3g"
+MACHINE_FEATURES ?= "apm serial bluetooth rtc wifi usbhost"
 
 # U-Boot bootloader
 UBOOT_ENV = "boot"
