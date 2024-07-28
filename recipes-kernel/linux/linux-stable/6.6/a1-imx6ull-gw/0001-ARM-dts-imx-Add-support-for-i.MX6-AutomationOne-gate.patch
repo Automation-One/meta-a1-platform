@@ -1,17 +1,21 @@
-From 974a57b5ef803382b6104be04cf92e6079b1a5c4 Mon Sep 17 00:00:00 2001
+From 34aaa5128a9f92b3f57fcb4fd7df0708ae7aad78 Mon Sep 17 00:00:00 2001
 From: Boerge Struempfel <boerge.struempfel@gmail.com>
 Date: Thu, 4 Jul 2024 00:24:59 +0200
-Subject: [PATCH 1/1] ARM: dts: imx: Add DT overlays for i.MX6 AutomationOne
- gateway
+Subject: [PATCH 1/1] ARM: dts: imx: Add support for i.MX6 AutomationOne
+ gateways
 
+ADD support for both the AutomationOne BASIC and PLUS gateways. Both
+gateways are based on an kontron som, with variying peripherals. However
+the changes between the BASIC and PLUS gateway can be ignored for the
+purpose of the devicetree.
 ---
  arch/arm/boot/dts/nxp/imx/Makefile          |   1 +
- arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts | 109 ++++++++++++++++++++
- 2 files changed, 110 insertions(+)
+ arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts | 126 ++++++++++++++++++++
+ 2 files changed, 127 insertions(+)
  create mode 100644 arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts
 
 diff --git a/arch/arm/boot/dts/nxp/imx/Makefile b/arch/arm/boot/dts/nxp/imx/Makefile
-index 3629e343d322..7d5db4b7db37 100644
+index 3629e343d3225..7d5db4b7db370 100644
 --- a/arch/arm/boot/dts/nxp/imx/Makefile
 +++ b/arch/arm/boot/dts/nxp/imx/Makefile
 @@ -314,6 +314,7 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
@@ -24,10 +28,10 @@ index 3629e343d322..7d5db4b7db37 100644
  	imx6ull-colibri-emmc-aster.dtb \
 diff --git a/arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts b/arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts
 new file mode 100644
-index 000000000000..905f6c51f51b
+index 0000000000000..dfe3e69fd7843
 --- /dev/null
 +++ b/arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts
-@@ -0,0 +1,109 @@
+@@ -0,0 +1,126 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) 2017 exceet electronics GmbH
@@ -55,6 +59,23 @@ index 000000000000..905f6c51f51b
 +		compatible = "mmc-pwrseq-simple";
 +		reset-gpios = <&gpio4 10 GPIO_ACTIVE_LOW>;
 +	};
++};
++
++
++&gpio1 {
++	gpio-line-names =
++		"", "", "", "", "", "", "", "",
++		"", "", "", "", "", "", "", "",
++		"", "", "", "", "", "", "", "",
++		"", "", "", "", "", "", "modem-vbat-en", "modem-on-off";
++};
++
++&gpio4 {
++	gpio-line-names =
++		"", "", "modem-reset", "", "", "", "", "",
++		"", "", "", "", "", "", "", "",
++		"", "", "", "", "", "", "", "",
++		"", "", "", "", "", "", "", "";
 +};
 +
 +&i2c4 {
