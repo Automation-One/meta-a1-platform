@@ -23,6 +23,10 @@ UBOOT_SUFFIX ?= "bin"
 
 WKS_FILE = "sdimage-imx6ull.wks"
 
+MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " \
+    linux-firmware-imx-sdma-imx6q \
+  "
+
 # Add any optional config files that might be present e.g. in other layers
 include conf/machine/include/ux-imx8mp-common-extra.inc
 include conf/machine/${MACHINE}-extra.conf
