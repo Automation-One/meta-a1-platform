@@ -1,0 +1,37 @@
+From a3942240f754b0f362191bfb884b3b82454e1327 Mon Sep 17 00:00:00 2001
+From: Boerge Struempfel <boerge.struempfel@gmail.com>
+Date: Sat, 31 Aug 2024 01:18:45 +0200
+Subject: [PATCH 3/3] kontron-sl-mx6ul: Use default to get env location
+
+The previous default was to only use the environment on the spi_nor if
+and only if the device has been booted from spi_nor.
+
+Upstream-State: Inappropriate [Userspecific Customization]
+---
+ board/kontron/sl-mx6ul/sl-mx6ul.c | 13 -------------
+ 1 file changed, 13 deletions(-)
+
+diff --git a/board/kontron/sl-mx6ul/sl-mx6ul.c b/board/kontron/sl-mx6ul/sl-mx6ul.c
+index 17a4b34f733..432c5f491aa 100644
+--- a/board/kontron/sl-mx6ul/sl-mx6ul.c
++++ b/board/kontron/sl-mx6ul/sl-mx6ul.c
+@@ -99,16 +99,3 @@ int board_late_init(void)
+ 
+ 	return 0;
+ }
+-
+-enum env_location env_get_location(enum env_operation op, int prio)
+-{
+-	if (prio)
+-		return ENVL_UNKNOWN;
+-
+-	if (sl_mx6ul_is_spi_nor_boot() && CONFIG_IS_ENABLED(ENV_IS_IN_SPI_FLASH))
+-		return ENVL_SPI_FLASH;
+-	else if (CONFIG_IS_ENABLED(ENV_IS_IN_MMC))
+-		return ENVL_MMC;
+-
+-	return ENVL_NOWHERE;
+-}
+-- 
+2.46.0
+
