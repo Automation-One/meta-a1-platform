@@ -1,0 +1,39 @@
+From fe4c4156098ac6df1d41c3e0773df049c3c92147 Mon Sep 17 00:00:00 2001
+From: Boerge Struempfel <boerge.struempfel@gmail.com>
+Date: Sat, 31 Aug 2024 14:59:57 +0200
+Subject: [PATCH 4/4] kontron: Enable sysreset through watchdog
+
+---
+ configs/kontron-sl-mx6ul_defconfig | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/configs/kontron-sl-mx6ul_defconfig b/configs/kontron-sl-mx6ul_defconfig
+index 288a2f4c549..9fa84567505 100644
+--- a/configs/kontron-sl-mx6ul_defconfig
++++ b/configs/kontron-sl-mx6ul_defconfig
+@@ -15,6 +15,7 @@ CONFIG_TARGET_KONTRON_MX6UL=y
+ CONFIG_DM_GPIO=y
+ CONFIG_DEFAULT_DEVICE_TREE="imx6ul-kontron-bl"
+ CONFIG_SPL_TEXT_BASE=0x00908000
++CONFIG_DM_RESET=y
+ CONFIG_SPL_MMC=y
+ CONFIG_SPL_SERIAL=y
+ CONFIG_BOOTCOUNT_BOOTLIMIT=3
+@@ -96,6 +97,9 @@ CONFIG_DM_SPI=y
+ CONFIG_FSL_QSPI=y
+ # CONFIG_FSL_QSPI_AHB_FULL_MAP is not set
+ CONFIG_MXC_SPI=y
++CONFIG_SYSRESET=y
++CONFIG_SYSRESET_WATCHDOG=y
++CONFIG_SYSRESET_WATCHDOG_AUTO=y
+ CONFIG_IMX_THERMAL=y
+ CONFIG_USB=y
+ CONFIG_SPL_USB_HOST=y
+@@ -108,3 +112,4 @@ CONFIG_USB_GADGET_PRODUCT_NUM=0xa4a5
+ CONFIG_CI_UDC=y
+ CONFIG_USB_GADGET_DOWNLOAD=y
+ CONFIG_SPL_USB_SDP_SUPPORT=y
++CONFIG_IMX_WATCHDOG=y
+-- 
+2.46.0
+
