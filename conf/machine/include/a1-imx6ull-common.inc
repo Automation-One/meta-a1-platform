@@ -28,5 +28,4 @@ MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " \
   "
 
 # Add any optional config files that might be present e.g. in other layers
-include conf/machine/include/ux-imx8mp-common-extra.inc
-include conf/machine/${MACHINE}-extra.conf
+include conf/machine/include/ux-imx6ull-common-extra.inc
