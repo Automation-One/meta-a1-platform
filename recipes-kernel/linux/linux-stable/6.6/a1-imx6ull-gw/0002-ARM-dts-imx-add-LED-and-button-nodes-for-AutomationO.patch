@@ -1,0 +1,96 @@
+From d3c96adbec42bc48ca46a2279eeb51ad9a57bd7b Mon Sep 17 00:00:00 2001
+From: Boerge Struempfel <boerge.struempfel@gmail.com>
+Date: Wed, 27 Nov 2024 19:56:18 +0100
+Subject: [PATCH 2/2] ARM: dts: imx: add LED and button nodes for AutomationOne
+ gateways
+
+---
+ arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts | 51 ++++++++++++++++++++-
+ 1 file changed, 49 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts b/arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts
+index dfe3e69fd784..9b6e954649ac 100644
+--- a/arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts
++++ b/arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts
+@@ -20,6 +20,29 @@ aliases {
+ 	};
+ 
+ 	/delete-node/ gpio-leds;
++	a1-gpio-leds {
++		compatible = "gpio-leds";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_a1_gpio_leds>;
++
++		ledA {
++			label = "ledA";
++			gpios = <&gpio5 3 GPIO_ACTIVE_HIGH>;
++			default-state = "off";
++		};
++
++		ledB {
++			label = "ledB";
++			gpios = <&gpio5 0 GPIO_ACTIVE_HIGH>;
++			default-state = "on";
++		};
++
++		ledC {
++			label = "ledC";
++			gpios = <&gpio1 8 GPIO_ACTIVE_HIGH>;
++			default-state = "off";
++		};
++	};
+ 
+ 	usdhc2_pwrseq: usdhc2_pwrseq {
+ 		compatible = "mmc-pwrseq-simple";
+@@ -30,8 +53,8 @@ usdhc2_pwrseq: usdhc2_pwrseq {
+ 
+ &gpio1 {
+ 	gpio-line-names =
+-		"", "", "", "", "", "", "", "",
+-		"", "", "", "", "", "", "", "",
++		"", "", "", "button", "", "", "", "",
++		"ledC", "", "", "", "", "", "", "",
+ 		"", "", "", "", "", "", "", "",
+ 		"", "", "", "", "", "", "modem-vbat-en", "modem-on-off";
+ };
+@@ -44,6 +67,14 @@ &gpio4 {
+ 		"", "", "", "", "", "", "", "";
+ };
+ 
++&gpio5 {
++	gpio-line-names =
++		"ledB", "", "", "ledA", "", "", "", "",
++		"", "", "", "", "", "", "", "",
++		"", "", "", "", "", "", "", "",
++		"", "", "", "", "", "", "", "";
++};
++
+ &i2c4 {
+ 	rtc@32{
+ 		status = "disabled";
+@@ -100,6 +131,22 @@ &usbotg1 {
+ };
+ 
+ &iomuxc {
++	pinctrl-0 = <&pinctrl_reset_out &pinctrl_a1_button>;
++
++	pinctrl_a1_gpio_leds: a1_gpio_leds {
++		fsl,pins = <
++			MX6UL_PAD_SNVS_TAMPER0__GPIO5_IO00	0x1b0b0
++			MX6UL_PAD_SNVS_TAMPER3__GPIO5_IO03	0x1b0b0
++			MX6UL_PAD_GPIO1_IO08__GPIO1_IO08	0x1b0b0
++		>;
++	};
++
++	pinctrl_a1_button: a1_button {
++		fsl,pins = <
++			MX6UL_PAD_GPIO1_IO03__GPIO1_IO03	0x1b0b0
++		>;
++	};
++
+ 	pinctrl_uart1: uart1grp {
+ 		fsl,pins = <
+ 			MX6UL_PAD_UART1_TX_DATA__UART1_DCE_TX	0x1b0b1
+-- 
+2.47.0
+
