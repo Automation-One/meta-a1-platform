@@ -35,7 +35,7 @@ MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " \
 	"
 
 # List of images to be built
-IMAGE_FSTYPES ?= "tar.xz wic.xz wic.gz"
+IMAGE_FSTYPES ?= " wic.gz "
 #TODO: UBIFS
 INITRAMFS_FSTYPES ?= "cpio.xz"
 
