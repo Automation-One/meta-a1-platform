@@ -1,0 +1,15 @@
+# short-description: Create an SD card image for AutomationOne IMX6ULL with A/B system
+# long-description: This script creates a partitioned SD card image for the AutomationOne IMX6ULL platform.
+# It includes a bootloader partition, two root filesystem partitions for A/B system updates, and a data partition.
+
+# Bootloader
+part --source rawcopy --sourceparams="file=flash.bin" --ondisk mmcblk --no-table --align 1 --size 2M
+
+# First rootfs partition
+part --source rootfs --ondisk mmcblk0 --fstype=ext4 --label rootfsA --size 256M
+
+# Second rootfs partition (for A/B system or similar)
+part --source rootfs --ondisk mmcblk0 --fstype=ext4 --label rootfsB --size=256M
+
+# Data partition
+part /data --ondisk mmcblk0 --fstype=ext4 --label data --size=256M
