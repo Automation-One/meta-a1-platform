@@ -14,7 +14,7 @@ PREFERRED_PROVIDER_u-boot-tools ?= "u-boot-mainline-tools"
 PREFERRED_PROVIDER_u-boot-tools-native ?= "u-boot-mainline-tools-native"
 PREFERRED_PROVIDER_u-boot-mkimage-native ?= "u-boot-mainline-tools-native"
 
-UBOOT_MAINLINE_VERSION = "2024.04%"
+UBOOT_MAINLINE_VERSION = "2024.10%"
 PREFERRED_VERSION_u-boot-mainline ?= "${UBOOT_MAINLINE_VERSION}"
 PREFERRED_VERSION_u-boot-mainline-native ?= "${UBOOT_MAINLINE_VERSION}"
 PREFERRED_VERSION_u-boot-mainline-fw-utils ?= "${UBOOT_MAINLINE_VERSION}"
