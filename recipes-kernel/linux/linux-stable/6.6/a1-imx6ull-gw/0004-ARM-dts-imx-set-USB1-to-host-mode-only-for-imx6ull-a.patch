@@ -1,0 +1,35 @@
+From 7e96faabdbcda3ac3df3bda7d3937a7ad54f5a9e Mon Sep 17 00:00:00 2001
+From: Boerge Struempfel <boerge.struempfel@gmail.com>
+Date: Tue, 17 Dec 2024 23:38:32 +0100
+Subject: [PATCH 4/4] ARM: dts: imx: set USB1 to host mode only for
+ imx6ull-a1-gw
+
+In some variants of the imx6ull-a1-gw, there is no way of determining
+wheter the gw is host or device. In order to avoid weird bugs due to
+inconsistent or wrong mode detection, we set the mode permanently to
+host mode.
+
+Also disable over-current detection, since it is not working correctly
+---
+ arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts b/arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts
+index e2fdab2daaa9..3c58e73536dd 100644
+--- a/arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts
++++ b/arch/arm/boot/dts/nxp/imx/imx6ull-a1-gw.dts
+@@ -113,6 +113,11 @@ &uart3 {
+ 	status = "okay";
+ };
+ 
++&usbotg1 {
++	dr_mode = "host";
++	disable-over-current;
++};
++
+ &usdhc2 {
+ 	pinctrl-names = "default", "state_100mhz", "state_200mhz";
+ 	pinctrl-0 = <&pinctrl_usdhc2>;
+-- 
+2.47.1
+

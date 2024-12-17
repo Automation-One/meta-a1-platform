@@ -1,3 +1,4 @@
 patch 0001-ARM-dts-imx-Add-support-for-i.MX6-AutomationOne-gate.patch
 patch 0002-ARM-dts-imx-add-LED-and-button-nodes-for-AutomationO.patch
 patch 0003-ARM-dts-imx-disable-missing-adc-from-AutomationOne-g.patch
+patch 0004-ARM-dts-imx-set-USB1-to-host-mode-only-for-imx6ull-a.patch
